@@ -20,7 +20,10 @@ manifest:
   projects:
     - name: zmk
       remote: zmkfirmware
-      revision: main
+      # 〈Known-Good Anchor〉— Build #227 (run 27451380456) が引いた上流に固定。
+      # `main` のままだとビルドの度に上流が動き、同じコミットでも別物が焼き上がる。
+      # 実機で無線動作を確認できている唯一の基準点なのでここへ錨を下ろす。
+      revision: ff09f2d0c9f13a868c8f71d71d9348ade438e4b6
       path: zmk
       import: app/west.yml
 
@@ -31,7 +34,8 @@ manifest:
 
     - name: zmk-listeners
       remote: ssbb
-      revision: v1
+      # `v1` はタグではなくブランチ。#227 時点の実コミットへ固定。
+      revision: c240cea
       path: modules/zmk-listeners
 
     - name: zmk-mouse-gesture
@@ -41,7 +45,9 @@ manifest:
 
     - name: zmk-scroll-snap
       remote: kot149
-      revision: v1
+      # `v1` はブランチのため #227(1f8fc86) → #228(dd21a0f) で黙って動いていた。
+      # 差分は docs のみだが再現性のため #227 時点へ固定。
+      revision: 1f8fc86
       path: modules/zmk-scroll-snap
 
     - name: zmk-rgbled-widget

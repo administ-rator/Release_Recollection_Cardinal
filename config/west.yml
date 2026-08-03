@@ -27,6 +27,36 @@ manifest:
       path: zmk
       import: app/west.yml
 
+    # 〈Zephyr Anchor〉— zmk の app/west.yml は zephyr を `v4.1.0+zmk-fixes`
+    # という **ブランチ** で指しているため、zmk を SHA 固定しても zephyr だけは
+    # ビルドの度に先端へ流れる（#227=58a5874a に対し 2026-08-02 時点で 9df4b12b）。
+    # west は「取り込む側（本 manifest）の定義が取り込まれる側に優先する」ため、
+    # ここで同名 project を再定義して #227 と同じコミットへ固定する。
+    # import ブロックは zmk 側 (ff09f2d) の内容をそのまま複製すること
+    # ―― name-blocklist が食い違うとモジュール構成が変わる。
+    - name: zephyr
+      remote: zmkfirmware
+      revision: 58a5874a446ace2893a196848282d271a551e512
+      import:
+        name-blocklist:
+          - ci-tools
+          - hal_altera
+          - hal_cypress
+          - hal_infineon
+          - hal_microchip
+          - hal_nxp
+          - hal_openisa
+          - hal_xtensa
+          - hal_st
+          - hal_ti
+          - loramac-node
+          - mcuboot
+          - mcumgr
+          - net-tools
+          - openthread
+          - edtt
+          - trusted-firmware-m
+
     - name: zmk-pmw3610-driver
       remote: cardinal-sys
       revision: 35f2c40

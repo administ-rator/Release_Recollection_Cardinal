@@ -124,6 +124,19 @@
         spi-max-frequency = <2000000>;
         irq-gpios    = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
         cpi = <2200>;
+        /* 〈Filter Bypass〉— α=1024 (=1.0) で IIR を恒等写像に落とし濾波器を無効化。
+         * 既定 614 (α=0.6) は整数切り捨てのため低速域でカウントを取りこぼし、
+         * さらに filtered_x/y が init 以外でリセットされないため停止後の再始動に
+         * 古い残響が混入する。カクツキ切り分けのための単一変数実験。
+         * 副作用が出れば本行を削除するだけで既定へ復帰する。 */
+        iir-filter-alpha = <1024>;
+        /* 〈Accumulation Gate〉— 2サンプル蓄積を停止しレポート周期を 16ms → 8ms へ。
+         * 蓄積は POLLING_RATE_250 前提で書かれた処理で、POLLING_RATE_125 と
+         * 併用すると 62.5Hz まで二重に半減し 60Hz ディスプレイとうなる。
+         * センサーのポーリングレート・消費電流は据え置きのまま報告周期のみ戻す。
+         * 上の iir-filter-alpha = <1024> と必ず併用すること
+         * ―― delta が半減するぶん IIR の切り捨て損失が相対的に増えるため。 */
+        no-sample-accumulation;
         force-awake;
         snipe-layers  = <15>;
         scroll-layers = <5>;

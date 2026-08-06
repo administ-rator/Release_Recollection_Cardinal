@@ -59,7 +59,11 @@ manifest:
 
     - name: zmk-pmw3610-driver
       remote: cardinal-sys
-      revision: 35f2c40
+      # 〈Accumulation Gate〉検証用の暫定ピン。feature ブランチ
+      # `feat/sample-accumulation-gate` (PR #1) の先端を直接指している。
+      # 実機で効果を確認できたらドライバ側をマージし、
+      # **マージ後のコミットハッシュへ張り替えてから** main へ載せること。
+      revision: 23dfac5
       path: modules/zmk-pmw3610-driver
 
     - name: zmk-listeners
